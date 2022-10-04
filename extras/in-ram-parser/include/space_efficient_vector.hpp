@@ -75,7 +75,26 @@ class space_efficient_vector {
       m_blocks[0] = utils::allocate_array<value_type>(m_block_size);
     }
 
+
+    space_efficient_vector(space_efficient_vector &&other) noexcept :
+      m_size{other.m_size},
+      m_block_size_log{other.m_block_size_log},
+      m_block_size_mask{other.m_block_size_mask},
+      m_block_size{other.m_block_size},
+      m_allocated_blocks{other.m_allocated_blocks},
+      m_cur_block_filled{other.m_cur_block_filled},
+      m_cur_block_id{other.m_cur_block_id},
+      m_blocks{other.m_blocks}
+    {
+      // We set the pointer to the backing data to null to signify that this object has been moved from
+      other.m_blocks = nullptr;
+    }
+
     ~space_efficient_vector() {
+      // We don't want to deallocate the backing data, if we moved out of this object
+      if (m_blocks == nullptr) {
+        return;
+      }
       for (std::uint64_t block_id = 0;
           block_id < m_allocated_blocks; ++block_id)
         utils::deallocate(m_blocks[block_id]);
