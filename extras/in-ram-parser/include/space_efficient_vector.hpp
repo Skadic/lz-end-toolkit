@@ -77,14 +77,14 @@ class space_efficient_vector {
 
 
     space_efficient_vector(space_efficient_vector &&other) noexcept :
-      m_size{other.m_size},
+      m_blocks{other.m_blocks},
       m_block_size_log{other.m_block_size_log},
       m_block_size_mask{other.m_block_size_mask},
       m_block_size{other.m_block_size},
       m_allocated_blocks{other.m_allocated_blocks},
-      m_cur_block_filled{other.m_cur_block_filled},
       m_cur_block_id{other.m_cur_block_id},
-      m_blocks{other.m_blocks}
+      m_cur_block_filled{other.m_cur_block_filled},
+      m_size{other.m_size}
     {
       // We set the pointer to the backing data to null to signify that this object has been moved from
       other.m_blocks = nullptr;
@@ -101,6 +101,7 @@ class space_efficient_vector {
       m_blocks = other.m_blocks;
       // We set the pointer to the backing data to null to signify that this object has been moved from
       other.m_blocks = nullptr;
+      return *this;
     }
 
     ~space_efficient_vector() {
