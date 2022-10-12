@@ -103,8 +103,8 @@ class space_efficient_vector {
       other.m_blocks = nullptr;
       return *this;
     }
-
-    ~space_efficient_vector() {
+    
+    void deallocate() {
       // We don't want to deallocate the backing data, if we moved out of this object
       if (m_blocks == nullptr) {
         return;
@@ -113,6 +113,12 @@ class space_efficient_vector {
           block_id < m_allocated_blocks; ++block_id)
         utils::deallocate(m_blocks[block_id]);
       utils::deallocate(m_blocks);
+
+      m_blocks = nullptr;
+    }
+
+    ~space_efficient_vector() {
+      deallocate();
     }
 
     inline std::uint64_t size() const {
