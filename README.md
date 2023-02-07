@@ -1,6 +1,8 @@
 LZ-End Toolkit
 ==============
 
+This is a fork of Dominik Kempa and Dmitry Kosolobov's implementation of LzEnd in compressed space. This fork only contains minor fixes for use in my library [gracli](https://github.com/Skadic/gracli).
+The original readme follows now:
 
 Description
 -----------
